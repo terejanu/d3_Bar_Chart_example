@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>D3 example</title>
+        <script src="https://d3js.org/d3.v5.min.js"></script>
+
+        <style type="text/css">
+
+        .mycircle {
+          fill: blue; 
+          stroke: red; 
+          stroke-width: 5;
+        }
+
+        svg .myrect {
+            fill: blue;
+            stroke-width: 0px;
+        }
+
+        svg .projection {
+          fill: white;
+        }
+        </style>
+        
+        <script type="text/javascript">
+
+            var myData;
+
+            function loadData()
+            {
+              d3.csv("https://raw.githubusercontent.com/terejanu/d3_Bar_Chart_example/master/data.csv")
+                .then(function(data)
+              {
+                myData = data;
+                createBarChart();
+              });
+            }
+
+            function createBarChart() {
+
+              var svg = d3.select("body")
+                          .append("svg")
+                          .attr("width", 800)
+                          .attr("height", 500);
+
+              // generate bars
+              svg.selectAll("rect")
+                  .data(myData)
+                  .enter()
+                  .append("rect")
+                  .attr("x", 50)
+                  .attr("y", function(d, i)
+                    {
+                      return (i+1)*(20+2);
+                    })
+                  .attr("height", 20)
+                  .attr("width", function(d, i)
+                    {
+                      return d.Prj;
+                    })
+                  .attr("class", "myrect");
+
+              // generate labels
+              svg.selectAll("text.year")
+                  .data(myData)
+                  .enter()
+                  .append("text")
+                  .text(function(d, i)
+                    {
+                      return d.Year;
+                    })
+                  .attr("x", 10)
+                  .attr("y", function(d, i)
+                    {
+                      return (i+1)*(20+2) + 15;
+                    });
+
+              // generate labels
+              svg.selectAll("text.projection")
+                  .data(myData)
+                  .enter()
+                  .append("text")
+                  .text(function(d, i)
+                    {
+                      return d.Prj + " mil";
+                    })
+                  .attr("x", function(d, i)
+                    {
+                      return d.Prj-10;
+                    })
+                  .attr("class", "projection")
+                  .attr("y", function(d, i)
+                    {
+                      return (i+1)*(20+2) + 15;
+                    });
+
+            }
+
+            window.onload = loadData;
+
+        </script>
+
+
+    </head>
+
+
+    <body>
+
+    </body>
+</html>
